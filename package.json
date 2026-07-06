@@ -1,0 +1,35 @@
+{
+  "name": "arita",
+  "version": "0.1.0",
+  "description": "Arita typeface (아리따) served as web fonts via jsDelivr CDN",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bepyan/arita.git"
+  },
+  "homepage": "https://bepyan.github.io/arita",
+  "keywords": [
+    "arita",
+    "아리따",
+    "webfont",
+    "korean-font",
+    "font",
+    "cdn"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:static": "node scripts/build.mjs --only=static",
+    "build:subset": "node scripts/build.mjs --only=subset",
+    "build:demo": "node scripts/build.mjs --only=demo",
+    "serve": "python3 -m http.server 8080",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "cn-font-split": "7.4.3",
+    "shiki": "^3.23.0"
+  }
+}

@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Arita Webfont · 아리따 글꼴</title>
+    <meta
+      name="description"
+      content="아리따(Arita) 글꼴을 jsDelivr CDN으로 손쉽게 사용하기 위한 저장소"
+    />
+
+    <!-- 데모는 로컬 빌드 결과(dist/static)를 참조합니다.
+         CDN 사용 예시는 상단 "Quick Start" 카드를 확인하세요. -->
+    <link rel="stylesheet" href="./dist/static/arita.css" />
+
+    <style>
+      /* ── 디자인 토큰 (Cal.com 스타일) ───────────────────────── */
+      :root {
+        /* surface */
+        --canvas: #ffffff;
+        --surface-soft: #f8f9fa;
+        --surface-card: #f5f5f5;
+        --surface-strong: #e5e7eb;
+        --surface-dark: #101010;
+        --surface-dark-elevated: #1a1a1a;
+        --hairline: #e5e7eb;
+        --hairline-soft: #f3f4f6;
+        /* text */
+        --ink: #111111;
+        --body: #374151;
+        --muted: #6b7280;
+        --muted-soft: #898989;
+        --on-dark: #ffffff;
+        --on-dark-soft: #a1a1aa;
+        /* brand */
+        --primary: #111111;
+        --primary-active: #242424;
+        --brand-accent: #3b82f6;
+        /* badge pastels */
+        --badge-orange: #fb923c;
+        --badge-pink: #ec4899;
+        --badge-violet: #8b5cf6;
+        --badge-emerald: #34d399;
+        /* radius */
+        --r-md: 8px;
+        --r-lg: 12px;
+        --r-xl: 16px;
+        --r-pill: 9999px;
+        /* spacing */
+        --s-xs: 8px;
+        --s-sm: 12px;
+        --s-md: 16px;
+        --s-lg: 24px;
+        --s-xl: 32px;
+        --s-xxl: 48px;
+        --s-section: 96px;
+        /* 역할 폰트: 부리=display(헤드라인), 돋움=body/UI */
+        --font-display: "Arita Buri KR", Georgia, serif;
+        --font-body: "Arita Dotum KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--canvas);
+        color: var(--body);
+        font-family: var(--font-body);
+        font-weight: 300;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+      /* ── 헤더 ─────────────────────────────────────────────── */
+      header {
+        padding: var(--s-section) 0 var(--s-xxl);
+      }
+      h1 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.75rem, 7vw, 4rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        margin: 0 0 var(--s-md);
+      }
+      .subtitle {
+        color: var(--muted);
+        font-size: 1.1rem;
+        font-weight: 300;
+        margin: 0;
+      }
+
+      /* ── 섹션 공통 ─────────────────────────────────────────── */
+      section { padding-bottom: var(--s-section); }
+      h2 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        line-height: 1.1;
+        letter-spacing: -0.015em;
+        color: var(--ink);
+        margin: 0 0 var(--s-lg);
+      }
+
+      /* ── Quick Start 카드 ──────────────────────────────────── */
+      .usage {
+        background: var(--surface-card);
+        border-radius: var(--r-lg);
+        padding: var(--s-xl);
+      }
+      .usage h2 { font-size: 1.5rem; margin-bottom: var(--s-lg); }
+      /* .step = 로딩 방식 (Dynamic Subset / Static / font-family) */
+      .usage .step { margin-bottom: var(--s-xl); }
+      .usage .step:last-child { margin-bottom: 0; }
+      .usage .step-title {
+        display: flex;
+        align-items: center;
+        gap: var(--s-xs);
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: var(--ink);
+        margin: 0 0 4px;
+      }
+      .usage .step-desc {
+        font-size: 0.88rem;
+        color: var(--muted);
+        margin: 0 0 var(--s-md);
+      }
+      /* .snippet = 방식 안의 개별 코드(HTML / CSS) */
+      .usage .snippet { margin-bottom: var(--s-md); }
+      .usage .snippet:last-child { margin-bottom: 0; }
+      .usage .snippet-label {
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 0.72rem;
+        letter-spacing: 0.04em;
+        color: var(--muted-soft);
+        margin: 0 0 6px;
+      }
+      .badge-pill {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        padding: 3px 10px;
+        border-radius: var(--r-pill);
+        background: var(--ink);
+        color: var(--on-dark);
+      }
+      .badge-pill.soft { background: var(--surface-strong); color: var(--body); }
+
+      /* ── 코드 블록 + 복사 버튼 ─────────────────────────────── */
+      /* Shiki(github-light) 배경이 흰색이라 흰 캔버스와 섞이지 않도록
+         코드블록을 hairline 테두리로 감싸 카드처럼 분리한다. */
+      .code-block {
+        position: relative;
+        border: 1px solid var(--hairline);
+        border-radius: var(--r-md);
+        overflow: hidden;
+        background: var(--canvas);
+      }
+      .code-block pre {
+        margin: 0;
+        padding: var(--s-md) var(--s-lg);
+        overflow-x: auto;
+        font-size: 0.82rem;
+        line-height: 1.7;
+        /* Shiki가 성공하면 배경/전경을 인라인으로 덮어씀. fallback 톤만 지정 */
+        background: var(--surface-card);
+        tab-size: 2;
+      }
+      .code-block pre,
+      .code-block code {
+        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      /* Shiki 렌더 전 원시 코드(로딩 중 / 실패 시) */
+      .code-block pre.raw {
+        color: var(--ink);
+        white-space: pre;
+      }
+      /* GitHub식 아이콘 복사 버튼: 정사각 + 클립보드/체크 SVG 토글 */
+      .copy-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        color: var(--muted);
+        background: var(--canvas);
+        border: none;
+        border-radius: var(--r-md);
+        cursor: pointer;
+        transition: color 0.15s, background 0.15s;
+      }
+      .copy-btn:hover { color: var(--ink); background: var(--surface-soft); }
+      .copy-btn svg { width: 16px; height: 16px; display: block; }
+      /* 기본은 클립보드, 복사 성공 시 체크 아이콘으로 토글 */
+      .copy-btn .icon-check { display: none; }
+      .copy-btn.copied { color: var(--badge-emerald); }
+      .copy-btn.copied .icon-copy { display: none; }
+      .copy-btn.copied .icon-check { display: block; }
+
+      /* ── 글꼴 소개 (스페시멘) ──────────────────────────────── */
+      .specimen {
+        border-top: 1px solid var(--hairline);
+        padding-top: var(--s-xl);
+        margin-bottom: var(--s-xl);
+      }
+      .specimen:last-of-type { margin-bottom: 0; }
+      .specimen-head {
+        margin-bottom: var(--s-md);
+      }
+      .specimen-head h3 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.6rem;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        margin: 0 0 var(--s-xs);
+      }
+      .specimen-head code {
+        display: inline-block;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 0.78rem;
+        color: var(--body);
+        background: var(--surface-card);
+        padding: 3px 10px;
+        border-radius: var(--r-md);
+      }
+      .specimen-desc {
+        color: var(--muted);
+        font-size: 0.95rem;
+        max-width: 62ch;
+        margin: 0 0 var(--s-lg);
+      }
+      .weights { display: flex; flex-direction: column; }
+      .weight-row {
+        display: flex;
+        align-items: baseline;
+        gap: var(--s-lg);
+        padding: 10px 0;
+        border-bottom: 1px solid var(--hairline-soft);
+      }
+      .weight-row:last-child { border-bottom: none; }
+      .weight-row .w {
+        flex: none;
+        width: 116px;
+        font-family: var(--font-body);
+        font-weight: 300;
+        font-size: 0.78rem;
+        color: var(--muted-soft);
+      }
+      .weight-row .sample {
+        font-size: 1.7rem;
+        line-height: 1.35;
+        color: var(--ink);
+      }
+
+      /* ── 푸터 (유일한 다크 표면) ───────────────────────────── */
+      footer {
+        background: var(--surface-dark);
+        color: var(--on-dark-soft);
+        padding: 64px 0;
+      }
+      footer .wrap { display: flex; flex-direction: column; gap: var(--s-md); }
+      footer .wordmark {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.35rem;
+        color: var(--on-dark);
+        letter-spacing: -0.01em;
+      }
+      footer p { margin: 0; font-size: 0.88rem; font-weight: 300; }
+      footer a { color: var(--on-dark); text-decoration: none; }
+      footer a:hover { text-decoration: underline; }
+
+      /* ── 반응형 ───────────────────────────────────────────── */
+      @media (max-width: 640px) {
+        header { padding-top: var(--s-xxl); }
+        .specimen-head code { margin-left: 0; width: 100%; }
+        .weight-row { flex-direction: column; gap: 2px; }
+        .weight-row .w { width: auto; }
+        .weight-row .sample { font-size: 1.4rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>아리따 글꼴</h1>
+        <p class="subtitle">
+          Arita Typeface · 아모레퍼시픽의 나눔 글꼴 · jsDelivr CDN
+        </p>
+      </header>
+
+      <!-- Quick Start: subtitle 바로 아래 배치 -->
+      <section>
+        <div class="usage">
+          <h2>Quick Start</h2>
+
+          <div class="step">
+            <h3 class="step-title">
+              <span class="badge-pill">권장</span>
+              Dynamic Subset
+            </h3>
+            <p class="step-desc">실제 쓰인 글자만 내려받습니다.</p>
+            <div class="snippet">
+              <p class="snippet-label">HTML</p>
+              <div class="code-block" data-lang="html">
+<pre class="raw"><code>&lt;link
+  rel="stylesheet"
+  as="style"
+  crossorigin
+  href="https://cdn.jsdelivr.net/npm/arita@latest/dist/dynamic-subset/arita-dynamic-subset.css"
+/&gt;</code></pre>
+              </div>
+            </div>
+            <div class="snippet">
+              <p class="snippet-label">CSS</p>
+              <div class="code-block" data-lang="css">
+<pre class="raw"><code>@import url("https://cdn.jsdelivr.net/npm/arita@latest/dist/dynamic-subset/arita-dynamic-subset.css");</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <h3 class="step-title">Static</h3>
+            <p class="step-desc">글꼴 전체를 한 번에 내려받습니다.</p>
+            <div class="snippet">
+              <p class="snippet-label">HTML</p>
+              <div class="code-block" data-lang="html">
+<pre class="raw"><code>&lt;link
+  rel="stylesheet"
+  as="style"
+  crossorigin
+  href="https://cdn.jsdelivr.net/npm/arita@latest/dist/static/arita.css"
+/&gt;</code></pre>
+              </div>
+            </div>
+            <div class="snippet">
+              <p class="snippet-label">CSS</p>
+              <div class="code-block" data-lang="css">
+<pre class="raw"><code>@import url("https://cdn.jsdelivr.net/npm/arita@latest/dist/static/arita.css");</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <h3 class="step-title">font-family</h3>
+            <p class="step-desc">불러온 글꼴을 적용합니다.</p>
+            <div class="snippet">
+              <div class="code-block" data-lang="css">
+<pre class="raw"><code>body {
+  font-family: "Arita Dotum KR", sans-serif;
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 글꼴 소개: 돋움 → 부리 → 산스 → 흑체 순서 -->
+      <section>
+        <h2>글꼴 소개</h2>
+
+        <div class="specimen">
+          <div class="specimen-head">
+            <h3>아리따 돋움</h3>
+            <code>font-family: "Arita Dotum KR"</code>
+          </div>
+          <p class="specimen-desc">
+            품격 있는 말씨를 사회와 나누기 위해 2005년 처음 시도한 본문용 글꼴입니다.
+            직선적이고 딱딱한 기존 돋움체에서 부드러운 곡선이 돋보이는 새로운 표정을 제시했습니다.
+          </p>
+          <div class="weights" style="font-family: 'Arita Dotum KR'">
+            <div class="weight-row"><span class="w">Thin · 100</span><span class="sample" style="font-weight: 100">부드러운 곡선의 표정</span></div>
+            <div class="weight-row"><span class="w">Light · 300</span><span class="sample" style="font-weight: 300">부드러운 곡선의 표정</span></div>
+            <div class="weight-row"><span class="w">Medium · 500</span><span class="sample" style="font-weight: 500">부드러운 곡선의 표정</span></div>
+            <div class="weight-row"><span class="w">SemiBold · 600</span><span class="sample" style="font-weight: 600">부드러운 곡선의 표정</span></div>
+            <div class="weight-row"><span class="w">Bold · 700</span><span class="sample" style="font-weight: 700">부드러운 곡선의 표정</span></div>
+          </div>
+        </div>
+
+        <div class="specimen">
+          <div class="specimen-head">
+            <h3>아리따 부리</h3>
+            <code>font-family: "Arita Buri KR"</code>
+          </div>
+          <p class="specimen-desc">
+            긴 문장에 적합한 본문용 글꼴로 2014년 완성됐습니다. 현대적인 여성의 단아하고 지적인
+            멋스러움을 담았으며, 국내 최초로 머리카락같이 가는 헤어라인 서체를 개발했습니다.
+          </p>
+          <div class="weights" style="font-family: 'Arita Buri KR'">
+            <div class="weight-row"><span class="w">HairLine · 100</span><span class="sample" style="font-weight: 100">단아하고 지적인 멋</span></div>
+            <div class="weight-row"><span class="w">Light · 300</span><span class="sample" style="font-weight: 300">단아하고 지적인 멋</span></div>
+            <div class="weight-row"><span class="w">Medium · 500</span><span class="sample" style="font-weight: 500">단아하고 지적인 멋</span></div>
+            <div class="weight-row"><span class="w">SemiBold · 600</span><span class="sample" style="font-weight: 600">단아하고 지적인 멋</span></div>
+            <div class="weight-row"><span class="w">Bold · 700</span><span class="sample" style="font-weight: 700">단아하고 지적인 멋</span></div>
+          </div>
+        </div>
+
+        <div class="specimen">
+          <div class="specimen-head">
+            <h3>아리따 산스</h3>
+            <code>font-family: "Arita Sans LTN"</code>
+          </div>
+          <p class="specimen-desc">
+            2012년 선보인 아리따 글꼴의 첫 로마자 서체입니다. 휴머니스트 산세리프 계열로
+            부드럽고 우아한 표정을 지니고 있습니다.
+          </p>
+          <div class="weights" style="font-family: 'Arita Sans LTN'">
+            <div class="weight-row"><span class="w">Thin · 100</span><span class="sample" style="font-weight: 100">Sharing Beauty With All</span></div>
+            <div class="weight-row"><span class="w">Light · 300</span><span class="sample" style="font-weight: 300">Sharing Beauty With All</span></div>
+            <div class="weight-row"><span class="w">Medium · 500</span><span class="sample" style="font-weight: 500">Sharing Beauty With All</span></div>
+            <div class="weight-row"><span class="w">SemiBold · 600</span><span class="sample" style="font-weight: 600">Sharing Beauty With All</span></div>
+            <div class="weight-row"><span class="w">Bold · 700</span><span class="sample" style="font-weight: 700">Sharing Beauty With All</span></div>
+          </div>
+        </div>
+
+        <div class="specimen">
+          <div class="specimen-head">
+            <h3>아리따 흑체</h3>
+            <code>font-family: "Arita Sans SC"</code>
+          </div>
+          <p class="specimen-desc">
+            국내 첫 중문 기업 서체로, 아모레퍼시픽이 추구하는 현대적인 여성의 아름다움을 담았습니다.
+            2016년 본문용 굵기를 시작으로 두 굵기를 더해 2017년 3종이 완성됐습니다.
+          </p>
+          <div class="weights" style="font-family: 'Arita Sans SC'">
+            <div class="weight-row"><span class="w">Light · 300</span><span class="sample" style="font-weight: 300">现代女性的美丽</span></div>
+            <div class="weight-row"><span class="w">Medium · 500</span><span class="sample" style="font-weight: 500">现代女性的美丽</span></div>
+            <div class="weight-row"><span class="w">Bold · 700</span><span class="sample" style="font-weight: 700">现代女性的美丽</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div class="wrap">
+        <div class="wordmark">아리따 글꼴</div>
+        <p>폰트 저작권 © AmorePacific &amp; 안상수·한재준·류양희. "Arita"는 아모레퍼시픽의 등록상표입니다.</p>
+        <p>
+          자세한 이용 조건은
+          <a href="https://design.amorepacific.com/arita/">공식 안내</a> 및
+          <a href="./LICENSE">LICENSE</a>를 참고하세요.
+        </p>
+      </div>
+    </footer>
+
+    <script type="module">
+      // 코드 하이라이팅은 build.mjs가 Shiki로 빌드 타임에 미리 수행한다.
+      // 런타임 JS는 복사 버튼만 담당 — 네트워크 의존이 없어 새로고침에도 안정적.
+
+      // GitHub Octicons: 클립보드(copy) + 체크(check) SVG.
+      const ICON_COPY = `<svg class="icon-copy" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>`;
+      const ICON_CHECK = `<svg class="icon-check" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L1.72 8.78a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>`;
+
+      for (const block of document.querySelectorAll(".code-block")) {
+        const codeEl = block.querySelector("code");
+        // Shiki가 코드를 여러 <span>으로 쪼개도 textContent는 원본을 그대로 복원한다.
+        const source = codeEl.textContent;
+
+        const btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.type = "button";
+        btn.setAttribute("aria-label", "코드 복사");
+        btn.innerHTML = ICON_COPY + ICON_CHECK;
+        btn.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(source);
+            btn.classList.add("copied");
+            btn.setAttribute("aria-label", "복사됨");
+            setTimeout(() => {
+              btn.classList.remove("copied");
+              btn.setAttribute("aria-label", "코드 복사");
+            }, 1500);
+          } catch (err) {
+            console.warn("클립보드 복사 실패:", err);
+          }
+        });
+        block.appendChild(btn);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+*.log
+.DS_Store
+
+# 빌드 산출물 — git에 커밋하지 않고 npm publish 시 tarball에만 포함(package.json files 참조).
+# jsDelivr는 cdn.jsdelivr.net/npm/arita@<버전>/dist/... 로 서빙한다.
+dist/
