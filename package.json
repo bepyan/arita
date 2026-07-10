@@ -25,6 +25,7 @@
     "build:static": "node scripts/build.mjs --only=static",
     "build:subset": "node scripts/build.mjs --only=subset",
     "build:demo": "node scripts/build.mjs --only=demo",
+    "deploy:demo": "npx wrangler pages deploy . --project-name=arita",
     "serve": "python3 -m http.server 8080",
     "prepublishOnly": "npm run build"
   },
