@@ -1,6 +1,6 @@
 {
   "name": "@bepyan/arita",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Arita typeface (아리따) served as web fonts via jsDelivr CDN",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",

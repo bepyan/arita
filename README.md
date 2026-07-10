@@ -24,7 +24,7 @@ SemiBold → **600**, Bold → **700**.
 `@latest`는 항상 최신 배포 버전을 자동으로 가리킵니다.
 프로덕션에서 CDN 캐시를 최대(약 1년, immutable)로 활용하려면
 [특정 버전](https://www.npmjs.com/package/@bepyan/arita?activeTab=versions)으로
-고정하는 것을 권장합니다 (예: `@0.1.0`).
+고정하는 것을 권장합니다 (예: `@0.2.0`).
 
 ### 1. Dynamic Subset (권장)
 
