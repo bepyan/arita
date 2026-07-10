@@ -13,12 +13,25 @@
  *
  * 의존: woff2_compress (brew install woff2), cn-font-split·shiki (devDependency).
  */
-import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync, renameSync, readdirSync } from 'node:fs';
+import { execFile } from 'node:child_process';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+  renameSync,
+  readdirSync,
+  statSync,
+} from 'node:fs';
+import os from 'node:os';
+import { promisify } from 'node:util';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fontSplit } from 'cn-font-split';
 import { codeToHtml } from 'shiki';
+
+const execFileAsync = promisify(execFile);
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const FONTS_DIR = join(ROOT, 'fonts');
@@ -96,23 +109,44 @@ function kb(bytes) {
 }
 
 // ────────────────────────────────────────────────────────────
-// static: 통짜 woff2 + full CSS
+// static: 통짜 woff2 + full CSS (woff2_compress 병렬, mtime 증분)
 // ────────────────────────────────────────────────────────────
-function buildStatic() {
+async function compressWoff2(ttf, dest, stem) {
+  if (existsSync(dest) && statSync(dest).mtimeMs >= statSync(ttf).mtimeMs) {
+    console.log(`  [static] ${stem}.woff2 (skip)`);
+    return;
+  }
+  // woff2_compress는 입력과 같은 폴더에 <stem>.woff2를 생성한다(출력 경로 지정 불가).
+  await execFileAsync('woff2_compress', [ttf]);
+  renameSync(join(FONTS_DIR, `${stem}.woff2`), dest);
+  console.log(`  [static] ${stem}.woff2`);
+}
+
+async function buildStatic() {
   const woff2Dir = join(STATIC_DIR, 'woff2');
-  fresh(STATIC_DIR);
   mkdirSync(woff2Dir, { recursive: true });
+  mkdirSync(STATIC_DIR, { recursive: true });
+
+  const jobs = FAMILIES.flatMap((fam) =>
+    fam.fonts.map((f) => ({
+      stem: f.stem,
+      ttf: join(FONTS_DIR, `${f.stem}.ttf`),
+      dest: join(woff2Dir, `${f.stem}.woff2`),
+    })),
+  );
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(os.availableParallelism(), jobs.length) }, async () => {
+      while (next < jobs.length) {
+        const job = jobs[next++];
+        await compressWoff2(job.ttf, job.dest, job.stem);
+      }
+    }),
+  );
 
   for (const fam of FAMILIES) {
     const faces = [];
     for (const f of fam.fonts) {
-      const ttf = join(FONTS_DIR, `${f.stem}.ttf`);
-      // woff2_compress는 입력과 같은 폴더에 <stem>.woff2를 생성한다(출력 경로 지정 불가).
-      // fonts/에 생성 후 목적지로 이동.
-      execFileSync('woff2_compress', [ttf], { stdio: 'pipe' });
-      const produced = join(FONTS_DIR, `${f.stem}.woff2`);
-      const dest = join(woff2Dir, `${f.stem}.woff2`);
-      renameSync(produced, dest);
       faces.push(
         [
           '@font-face {',
@@ -241,7 +275,7 @@ async function main() {
 
   if (only === 'all' || only === 'static') {
     console.log('▶ static 빌드…');
-    buildStatic();
+    await buildStatic();
   }
   if (only === 'all' || only === 'subset') {
     console.log('▶ dynamic-subset 빌드…');
