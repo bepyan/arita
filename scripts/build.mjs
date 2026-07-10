@@ -286,6 +286,13 @@ async function main() {
     await buildDemo();
   }
   console.log('✅ 완료');
+  // ponytail: cn-font-split FFI가 Node shutdown에서 SIGABRT(exit 134)를 낸다. 정상 종료로 우회.
+  process.exit(0);
 }
 
-await main();
+try {
+  await main();
+} catch (err) {
+  console.error(err);
+  process.exit(1);
+}
