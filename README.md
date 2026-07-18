@@ -1,42 +1,36 @@
-# Arita Webfont
+# 아리따 글꼴
 
-아리따(Arita) 글꼴을 **jsDelivr CDN**으로 손쉽게 사용하기 위한 저장소입니다.
-CSS 한 줄로 웹에서 아리따를 쓸 수 있습니다.
-
-> 아리따는 아모레퍼시픽의 기업 아이덴티티를 담은 글꼴이자, "나눔의 가치"를
-> 실천하기 위해 누구나 무료로 사용하도록 배포하는 나눔 글꼴입니다.
-> 저작권·이용 조건은 [LICENSE](./LICENSE)를 참고하세요.
-
-## 글꼴 가족
-
-| `font-family` | 언어 | 지원 `font-weight` |
-| --- | --- | --- |
-| `Arita Sans LTN` | 로마자 | 100 · 300 · 500 · 600 · 700 |
-| `Arita Dotum KR` | 한글 (돋움) | 100 · 300 · 500 · 600 · 700 |
-| `Arita Buri KR` | 한글 (부리) | 100 · 300 · 500 · 600 · 700 |
-| `Arita Sans SC` | 중문 간체 | 300 · 500 · 700 |
-
-`font-weight` 매핑: Thin/HairLine → **100**, Light → **300**, Medium → **500**,
-SemiBold → **600**, Bold → **700**.
+[아리따(Arita)](https://www.apgroup.com/int/ko/about-us/visual-identity/arita-typeface/arita-typeface.html)는
+아모레퍼시픽이 만들어 누구나 무료로 쓸 수 있게 배포하는 나눔 글꼴입니다.
+이 저장소는 아리따를 **jsDelivr CDN**으로 제공해, 설치나 파일 다운로드 없이
+CSS 한 줄로 웹에서 쓸 수 있게 합니다.
 
 ## 사용법
 
-`@latest`는 항상 최신 배포 버전을 자동으로 가리킵니다.
-프로덕션에서 CDN 캐시를 최대(약 1년, immutable)로 활용하려면
-[특정 버전](https://www.npmjs.com/package/@bepyan/arita?activeTab=versions)으로
-고정하는 것을 권장합니다 (예: `@0.2.0`).
+### 1. 쓰고 싶은 글꼴을 골라 `<head>`에 추가
 
-### 1. Dynamic Subset (권장)
-
-페이지에 실제로 쓰인 글자 범위(`unicode-range`)만 내려받아 가장 가볍습니다.
-한글·중문처럼 큰 글꼴에 특히 유리합니다.
+필요한 글꼴만 불러와야 페이지가 가볍습니다. 아래는 **아리따 돋움** 예시입니다.
 
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/dynamic-subset/arita-dynamic-subset.css"
+  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/dynamic-subset/arita-dotum-dynamic-subset.css"
 />
 ```
+
+다른 글꼴은 CSS 파일명만 바꾸면 됩니다.
+
+| 글꼴 | `font-family` | `font-weight` | CSS 파일명 |
+| --- | --- | --- | --- |
+| 아리따 돋움 (한글) | `Arita Dotum KR` | 100 · 300 · 500 · 600 · 700 | `arita-dotum-dynamic-subset.css` |
+| 아리따 부리 (한글) | `Arita Buri KR` | 100 · 300 · 500 · 600 · 700 | `arita-buri-dynamic-subset.css` |
+| 아리따 산스 (로마자) | `Arita Sans LTN` | 100 · 300 · 500 · 600 · 700 | `arita-sans-ltn-dynamic-subset.css` |
+| 아리따 흑체 (중문 간체) | `Arita Sans SC` | 300 · 500 · 700 | `arita-sans-sc-dynamic-subset.css` |
+
+굵기 이름 매핑: Thin/HairLine → **100**, Light → **300**, Medium → **500**,
+SemiBold → **600**, Bold → **700**.
+
+### 2. CSS에서 `font-family` 지정
 
 ```css
 body {
@@ -44,52 +38,21 @@ body {
 }
 ```
 
-### 2. Static (전체)
+이걸로 끝입니다. 기본 방식(dynamic subset)은 글꼴 파일 전체 대신 페이지에
+실제 쓰인 글자 조각만 내려받으므로, 한글처럼 글자 수가 많은 글꼴에 특히
+유리합니다. 따로 설정할 것은 없습니다.
 
-글꼴 전체를 한 번에 받는 통짜 방식입니다. 구성이 단순합니다.
+### 더 알아보기
 
-```html
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/static/arita.css"
-/>
-```
+| 용도 | 경로 |
+| --- | --- |
+| 모든 글꼴을 한 번에 | `dist/dynamic-subset/arita-dynamic-subset.css` |
+| 글꼴 파일을 통째로 (static) | `dist/static/arita-dotum.css` 등 파일명 규칙 동일 |
+| 모든 글꼴을 통째로 | `dist/static/arita.css` |
 
-### 3. 가족별 개별 로드
-
-필요한 가족만 골라 로드하면 트래픽을 더 줄일 수 있습니다.
-
-| 가족 | Dynamic Subset | Static |
-| --- | --- | --- |
-| Sans LTN | `dist/dynamic-subset/arita-sans-ltn-dynamic-subset.css` | `dist/static/arita-sans-ltn.css` |
-| Dotum KR | `dist/dynamic-subset/arita-dotum-dynamic-subset.css` | `dist/static/arita-dotum.css` |
-| Buri KR | `dist/dynamic-subset/arita-buri-dynamic-subset.css` | `dist/static/arita-buri.css` |
-| Sans SC | `dist/dynamic-subset/arita-sans-sc-dynamic-subset.css` | `dist/static/arita-sans-sc.css` |
-
-```html
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/dynamic-subset/arita-buri-dynamic-subset.css"
-/>
-```
-
-### CSS `@import`
-
-```css
-@import url("https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/static/arita.css");
-```
-
-## 예제
-
-```html
-<style>
-  h1 { font-family: "Arita Buri KR"; font-weight: 700; }
-  p  { font-family: "Arita Dotum KR"; font-weight: 300; }
-</style>
-
-<h1>아리따 부리</h1>
-<p>품격 있는 말씨를 사회와 나누다.</p>
-```
+`@latest`는 항상 최신 배포 버전을 가리킵니다. 프로덕션에서는
+[특정 버전](https://www.npmjs.com/package/@bepyan/arita?activeTab=versions)으로
+고정하면 CDN 캐시를 최대(약 1년, immutable)로 활용할 수 있습니다 (예: `@0.2.0`).
 
 ## 빌드
 
@@ -112,9 +75,7 @@ npm run serve          # http://localhost:8080 에서 index.html 데모 확인
 
 - [`cn-font-split`](https://www.npmjs.com/package/cn-font-split) — TTF를
   `unicode-range` 단위 woff2 조각 + `@font-face` CSS로 분할 (dynamic subset).
-- `woff2_compress` (`brew install woff2`) — TTF → 통짜 woff2 변환 (static).
-- [`shiki`](https://shiki.style) — 데모 코드블록을 **빌드 타임에** 하이라이팅.
-  런타임 네트워크 의존이 없어 새로고침에도 안정적이다.
+- `woff2_compress` (`brew install woff2`) — TTF → woff2 변환 (static).
 
 포맷은 **woff2 단독**입니다. 2017년 이후 모든 최신 브라우저가 지원합니다.
 
