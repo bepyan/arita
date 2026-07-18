@@ -1,0 +1,129 @@
+---
+/** 굵기(행) × 서체(열) 견본표 — 공식 아리따 스페시멘 그리드의 재현.
+ *  글꼴 이름·메타데이터는 원본 견본처럼 표 하단에 둔다.
+ *  빈 칸은 해당 굵기가 제공되지 않는 서체다. */
+const FACES = [
+  {
+    name: '아리따 돋움',
+    script: '한글',
+    family: 'Arita Dotum KR',
+    glyph: '아리따돋움',
+    director: 'Ahn Sang-soo · Han Jae-joon',
+    design: 'Lee Yong-jae',
+    typeformat: 'OTF · TTF',
+    characters: ['한글 11,172', '로마자 94', '심벌 989'],
+  },
+  {
+    name: '아리따 부리',
+    script: '한글',
+    family: 'Arita Buri KR',
+    glyph: '아리따부리',
+    director: 'Ahn Sang-soo · Han Jae-joon',
+    design: 'Ryu Yang-hee',
+    typeformat: 'OTF · TTF',
+    characters: ['한글 11,172', '로마자 94', '심벌 1,028', '추가 글리프 2'],
+  },
+  {
+    name: '아리따 산스',
+    script: '라틴',
+    family: 'Arita Sans LTN',
+    glyph: 'Arita Sans',
+    director: 'Ahn Sang-soo · Michel de Boer',
+    design: 'Peter Verheul',
+    typeformat: 'OTF (CFF)',
+    characters: ['로마자 52', '확장 로마자 50', '심벌 86'],
+  },
+  {
+    name: '아리따 흑체',
+    script: '중문 간체',
+    family: 'Arita Sans SC',
+    glyph: '阿丽达黑体',
+    director: 'Ahn Sang-soo · Zhu Zuwei',
+    design: 'Liu Yu · Liu Yanran · Zhang Xuan',
+    typeformat: 'OTF · TTF',
+    characters: ['간체 6,763', '번체 2,114', '국제 심벌 1,103', '대체 글리프 13', 'CJK 호환 한자 383'],
+  },
+];
+
+// available: FACES 순서와 동일. 부리의 100은 HairLine이라는 고유 이름을 갖는다.
+const ROWS = [
+  { label: 'Thin · HairLine', weight: 100, available: [true, true, true, false] },
+  { label: 'Light', weight: 300, available: [true, true, true, true] },
+  { label: 'Medium', weight: 500, available: [true, true, true, true] },
+  { label: 'SemiBold', weight: 600, available: [true, true, true, false] },
+  { label: 'Bold', weight: 700, available: [true, true, true, true] },
+];
+
+const META_ROWS = [
+  { label: 'Director', value: (f: (typeof FACES)[number]) => f.director },
+  { label: 'Design', value: (f: (typeof FACES)[number]) => f.design },
+];
+---
+
+<div class="matrix-scroll">
+  <table class="matrix">
+    <caption class="sr-only">아리따 네 글꼴의 굵기별 견본과 메타데이터</caption>
+    <tbody>
+      {
+        ROWS.map((row) => (
+          <tr>
+            <th scope="row">
+              {row.label} {row.weight}
+            </th>
+            {FACES.map((f, j) => (
+              <td>
+                {row.available[j] && (
+                  <span
+                    class="glyph"
+                    style={`font-family: '${f.family}'; font-weight: ${row.weight}`}
+                  >
+                    {f.glyph}
+                  </span>
+                )}
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+    <tbody class="matrix-meta">
+      <tr>
+        <th scope="row">Name of Typeface</th>
+        {
+          FACES.map((f) => (
+            <td>
+              <strong>{f.name}</strong>
+              <small>{f.script}</small>
+            </td>
+          ))
+        }
+      </tr>
+      {
+        META_ROWS.map(({ label, value }) => (
+          <tr>
+            <th scope="row">{label}</th>
+            {FACES.map((f) => (
+              <td>{value(f)}</td>
+            ))}
+          </tr>
+        ))
+      }
+      <tr class="meta-gap">
+        <th scope="row">Typeformat</th>
+        {FACES.map((f) => <td>{f.typeformat}</td>)}
+      </tr>
+      <tr>
+        <th scope="row">Number of Characters</th>
+        {
+          FACES.map((f) => (
+            <td>
+              {f.characters.map((line) => (
+                <span class="char-line">{line}</span>
+              ))}
+            </td>
+          ))
+        }
+      </tr>
+    </tbody>
+  </table>
+</div>

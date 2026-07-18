@@ -1,15 +1,17 @@
 # 아리따 글꼴
 
-[아리따(Arita)](https://www.apgroup.com/int/ko/about-us/visual-identity/arita-typeface/arita-typeface.html)는
-아모레퍼시픽이 만들어 누구나 무료로 쓸 수 있게 배포하는 나눔 글꼴입니다.
-이 저장소는 아리따를 **jsDelivr CDN**으로 제공해, 설치나 파일 다운로드 없이
-CSS 한 줄로 웹에서 쓸 수 있게 합니다.
+아모레퍼시픽의 나눔 폰트 [아리따(Arita)](https://design.amorepacific.com/arita/)를
+링크 한 줄로 불러오는 **비공식 웹폰트 CDN**입니다.
+
+데모: <https://arita.bepyan.me>
 
 ## 사용법
 
-### 1. 쓰고 싶은 글꼴을 골라 `<head>`에 추가
+### 1. 글꼴 불러오기
 
-필요한 글꼴만 불러와야 페이지가 가볍습니다. 아래는 **아리따 돋움** 예시입니다.
+쓰고 싶은 글꼴을 골라 `<head>`에 링크를 추가하세요. 아래는 **아리따 돋움**
+예시입니다. 다른 글꼴은 표에서 CSS 파일명만 바꾸면 됩니다. 필요한 글꼴만
+불러와야 페이지가 가볍습니다.
 
 ```html
 <link
@@ -18,19 +20,19 @@ CSS 한 줄로 웹에서 쓸 수 있게 합니다.
 />
 ```
 
-다른 글꼴은 CSS 파일명만 바꾸면 됩니다.
-
 | 글꼴 | `font-family` | `font-weight` | CSS 파일명 |
 | --- | --- | --- | --- |
 | 아리따 돋움 (한글) | `Arita Dotum KR` | 100 · 300 · 500 · 600 · 700 | `arita-dotum-dynamic-subset.css` |
 | 아리따 부리 (한글) | `Arita Buri KR` | 100 · 300 · 500 · 600 · 700 | `arita-buri-dynamic-subset.css` |
-| 아리따 산스 (로마자) | `Arita Sans LTN` | 100 · 300 · 500 · 600 · 700 | `arita-sans-ltn-dynamic-subset.css` |
+| 아리따 산스 (라틴) | `Arita Sans LTN` | 100 · 300 · 500 · 600 · 700 | `arita-sans-ltn-dynamic-subset.css` |
 | 아리따 흑체 (중문 간체) | `Arita Sans SC` | 300 · 500 · 700 | `arita-sans-sc-dynamic-subset.css` |
 
 굵기 이름 매핑: Thin/HairLine → **100**, Light → **300**, Medium → **500**,
 SemiBold → **600**, Bold → **700**.
 
-### 2. CSS에서 `font-family` 지정
+### 2. 글꼴 적용하기
+
+CSS에서 글꼴을 적용할 곳에 위 표의 `font-family` 이름을 쓰면 끝입니다.
 
 ```css
 body {
@@ -38,21 +40,17 @@ body {
 }
 ```
 
-이걸로 끝입니다. 기본 방식(dynamic subset)은 글꼴 파일 전체 대신 페이지에
-실제 쓰인 글자 조각만 내려받으므로, 한글처럼 글자 수가 많은 글꼴에 특히
-유리합니다. 따로 설정할 것은 없습니다.
-
 ### 더 알아보기
+
+기본 방식(dynamic subset)은 글꼴 파일 전체 대신 페이지에 실제 쓰인 글자
+조각만 내려받습니다. 한글처럼 글자 수가 많은 글꼴에 특히 유리하고, 따로
+설정할 것은 없습니다.
 
 | 용도 | 경로 |
 | --- | --- |
 | 모든 글꼴을 한 번에 | `dist/dynamic-subset/arita-dynamic-subset.css` |
 | 글꼴 파일을 통째로 (static) | `dist/static/arita-dotum.css` 등 파일명 규칙 동일 |
 | 모든 글꼴을 통째로 | `dist/static/arita.css` |
-
-`@latest`는 항상 최신 배포 버전을 가리킵니다. 프로덕션에서는
-[특정 버전](https://www.npmjs.com/package/@bepyan/arita?activeTab=versions)으로
-고정하면 CDN 캐시를 최대(약 1년, immutable)로 활용할 수 있습니다 (예: `@1.0.0`).
 
 ## 빌드
 
