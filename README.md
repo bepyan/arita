@@ -1,6 +1,6 @@
 # 아리따 글꼴
 
-아모레퍼시픽의 나눔 폰트 [아리따(Arita)](https://design.amorepacific.com/arita/)를
+아모레퍼시픽의 나눔 글꼴 [아리따(Arita)](https://design.amorepacific.com/arita/)를
 링크 한 줄로 불러오는 **비공식 웹폰트 CDN**입니다.
 
 데모: <https://arita.bepyan.me>
@@ -16,7 +16,7 @@
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/dynamic-subset/arita-dotum-dynamic-subset.css"
+  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@1.0.0/dist/dynamic-subset/arita-dotum-dynamic-subset.css"
 />
 ```
 
@@ -33,10 +33,12 @@ SemiBold → **600**, Bold → **700**.
 ### 2. 글꼴 적용하기
 
 CSS에서 글꼴을 적용할 곳에 위 표의 `font-family` 이름을 쓰면 끝입니다.
+기본 굵기로는 `font-weight: 500`(Medium)을 권장합니다.
 
 ```css
 body {
   font-family: "Arita Dotum KR", sans-serif;
+  font-weight: 500;
 }
 ```
 
@@ -66,8 +68,8 @@ pnpm build:subset      # dynamic-subset만
 ### 데모 페이지
 
 데모는 [Astro](https://astro.build) 기반이며 소스는 `src/`에 있습니다.
-개발 서버는 로컬 폰트 빌드(`dist/`)를 참조하므로 폰트 빌드가 선행돼야 하고,
-빌드·배포된 페이지는 jsDelivr CDN의 폰트를 사용합니다.
+개발 서버는 로컬 글꼴 빌드(`dist/`)를 참조하므로 글꼴 빌드가 선행돼야 합니다.
+빌드·배포된 페이지는 jsDelivr CDN의 글꼴을 사용합니다.
 
 ```bash
 pnpm dev               # http://localhost:4321 개발 서버
@@ -82,8 +84,8 @@ pnpm deploy:demo       # .site/ 를 Cloudflare Pages에 배포
   `unicode-range` 단위 woff2 조각 + `@font-face` CSS로 분할 (dynamic subset).
 - `woff2_compress` (`brew install woff2`) — TTF → woff2 변환 (static).
 
-포맷은 **woff2 단독**입니다. 2017년 이후 모든 최신 브라우저가 지원합니다.
+포맷은 **woff2 단독**입니다. 2017년 이후 출시된 주요 브라우저는 모두 지원합니다.
 
 ## 라이선스
 
-폰트 저작권은 아모레퍼시픽에 있습니다. [LICENSE](./LICENSE)를 확인하세요.
+글꼴 저작권은 아모레퍼시픽에 있습니다. [LICENSE](./LICENSE)를 확인하세요.

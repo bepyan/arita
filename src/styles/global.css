@@ -240,20 +240,22 @@ code {
 }
 .ref-table td { border-bottom: 1px solid var(--rule-soft); }
 .ref-table td small { color: var(--ink-faint); }
-.ref-note {
-  margin: 0;
-  max-width: 46em;
-  font-size: var(--text-label);
-  line-height: 1.7;
-  color: var(--ink-faint);
-  /* keep-all 어절이 길 때(코드 토큰 등) 넘치지 않게 비상 줄바꿈 허용 */
-  word-break: keep-all;
-  overflow-wrap: break-word;
+
+/* ── 글꼴 선택 표: 라디오 열 ──────────────────────────── */
+.font-table-fieldset { border: 0; margin: 0 0 3rem; padding: 0; min-width: 0; }
+.font-table-fieldset .ref-table-wrap { margin-bottom: 0; }
+.font-table td:first-child { width: 4.5rem; }
+.font-table input[type='radio'] { accent-color: var(--ink); cursor: pointer; }
+.font-table label { cursor: pointer; }
+
+/* 글꼴 라디오 값에 따라 같은 data-font의 코드 예시만 노출 (:has() 지원 필요) */
+.font-panel { display: none; }
+.usage-body:has(#font-dotum:checked) .font-panel[data-font='dotum'],
+.usage-body:has(#font-buri:checked) .font-panel[data-font='buri'],
+.usage-body:has(#font-sans-ltn:checked) .font-panel[data-font='sans-ltn'],
+.usage-body:has(#font-sans-sc:checked) .font-panel[data-font='sans-sc'] {
+  display: block;
 }
-.ref-note p { margin: 0; }
-.ref-note .ref-note-title { font-weight: 700; color: var(--ink-soft); }
-.ref-note ul { margin: 0.25rem 0 0.5rem; padding-left: 1.2em; }
-.ref-note a { color: var(--ink-soft); text-underline-offset: 0.3em; }
 
 /* ── 코드 블록 + 복사 버튼 ────────────────────────────── */
 .code-block {

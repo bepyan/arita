@@ -3,27 +3,62 @@ import CodeBlock from '../components/code-block.astro';
 import SpecimenGrid from '../components/specimen-grid.astro';
 import { version } from '../../package.json';
 import favicon from '../assets/favicon.svg';
-import ogImage from '../assets/og.png';
 import '../styles/global.css';
 
 const TITLE = '아리따 글꼴(Typeface Arita)';
 const DESCRIPTION =
-  '아모레퍼시픽의 나눔 폰트 아리따(Arita)를 링크 한 줄로 불러오는 비공식 웹폰트 CDN입니다.';
+  '아모레퍼시픽의 나눔 글꼴 아리따(Arita)를 링크 한 줄로 불러오는 비공식 웹폰트 CDN입니다.';
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImageUrl = new URL(ogImage.src, Astro.site);
+const ogImageUrl = new URL('/og.png', Astro.site);
 
 // dev는 로컬 폰트 빌드(sync:demo → public/dist)로 배포 전 결과를 미리보고, 빌드는 CDN을 쓴다.
 const FONT_CSS = import.meta.env.DEV
   ? '/dist/static/arita.css'
   : 'https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/dynamic-subset/arita-dynamic-subset.css';
 
-const LINK_SNIPPET = `<link
+const FONTS = [
+  {
+    id: 'dotum',
+    label: '아리따 돋움',
+    script: '한글',
+    family: 'Arita Dotum KR',
+    weights: '100 · 300 · 500 · 600 · 700',
+    cssFile: 'arita-dotum-dynamic-subset.css',
+  },
+  {
+    id: 'buri',
+    label: '아리따 부리',
+    script: '한글',
+    family: 'Arita Buri KR',
+    weights: '100 · 300 · 500 · 600 · 700',
+    cssFile: 'arita-buri-dynamic-subset.css',
+  },
+  {
+    id: 'sans-ltn',
+    label: '아리따 산스',
+    script: '라틴',
+    family: 'Arita Sans LTN',
+    weights: '100 · 300 · 500 · 600 · 700',
+    cssFile: 'arita-sans-ltn-dynamic-subset.css',
+  },
+  {
+    id: 'sans-sc',
+    label: '아리따 흑체',
+    script: '중문 간체',
+    family: 'Arita Sans SC',
+    weights: '300 · 500 · 700',
+    cssFile: 'arita-sans-sc-dynamic-subset.css',
+  },
+];
+
+const linkSnippet = (font: (typeof FONTS)[number]) => `<link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@${version}/dist/dynamic-subset/arita-dotum-dynamic-subset.css"
+  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@${version}/dist/dynamic-subset/${font.cssFile}"
 />`;
 
-const CSS_SNIPPET = `body {
-  font-family: "Arita Dotum KR", sans-serif;
+const cssSnippet = (font: (typeof FONTS)[number]) => `body {
+  font-family: "${font.family}", sans-serif;
+  font-weight: 500;
 }`;
 ---
 
@@ -43,8 +78,8 @@ const CSS_SNIPPET = `body {
     <meta property="og:site_name" content="아리따 글꼴" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content="2400" />
+    <meta property="og:image:height" content="1260" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={TITLE} />
     <meta name="twitter:description" content={DESCRIPTION} />
@@ -58,7 +93,7 @@ const CSS_SNIPPET = `body {
       <header class="masthead">
         <a class="brand" href="https://design.amorepacific.com/arita/" target="_blank" rel="noopener noreferrer">아리따</a>
         <p class="hero-desc">
-          아모레퍼시픽의 나눔 폰트{' '}
+          아모레퍼시픽의 나눔 글꼴{' '}
           <a href="https://design.amorepacific.com/arita/" target="_blank" rel="noopener noreferrer">아리따(Arita)</a>를
           링크 한 줄로 불러오는 <strong>비공식 웹폰트 CDN</strong>입니다.
         </p>
@@ -83,76 +118,70 @@ const CSS_SNIPPET = `body {
           <div class="rail">
             <h2>사용법<small>Getting Started</small></h2>
           </div>
-          <div>
+          <div class="usage-body">
             <div class="step">
               <h3 class="step-title">1 · 글꼴 불러오기</h3>
               <p class="step-desc">
-                쓰고 싶은 글꼴을 골라 <code>&lt;head&gt;</code>에 링크를 추가하세요.
-                아래는 <strong>아리따 돋움</strong> 예시입니다. 다른 글꼴은 표에서 CSS 파일명만
-                바꾸면 됩니다. 필요한 글꼴만 불러와야 페이지가 가볍습니다.
+                필요한 글꼴의 CSS 링크를 <code>&lt;head&gt;</code>에 추가하세요.
               </p>
+              <fieldset class="font-table-fieldset">
+                <legend class="sr-only">글꼴 선택</legend>
+                <div class="ref-table-wrap">
+                  <table class="ref-table font-table">
+                    <thead>
+                      <tr>
+                        <th>선택</th>
+                        <th>글꼴</th>
+                        <th><code>font-family</code></th>
+                        <th><code>font-weight</code></th>
+                        <th>CSS 파일명</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {FONTS.map((font, i) => (
+                        <tr>
+                          <td>
+                            <input
+                              type="radio"
+                              name="font-select"
+                              id={`font-${font.id}`}
+                              value={font.id}
+                              checked={i === 0}
+                            />
+                          </td>
+                          <td><label for={`font-${font.id}`}>{font.label} <small>{font.script}</small></label></td>
+                          <td><code>{font.family}</code></td>
+                          <td>{font.weights}</td>
+                          <td><code>{font.cssFile}</code></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </fieldset>
               <div class="snippet">
                 <p class="snippet-label">HTML</p>
-                <CodeBlock code={LINK_SNIPPET} lang="html" />
-              </div>
-              <div class="ref-table-wrap">
-                <table class="ref-table">
-                  <thead>
-                    <tr>
-                      <th>글꼴</th>
-                      <th><code>font-family</code></th>
-                      <th><code>font-weight</code></th>
-                      <th>CSS 파일명</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>아리따 돋움 <small>한글</small></td>
-                      <td><code>Arita Dotum KR</code></td>
-                      <td>100 · 300 · 500 · 600 · 700</td>
-                      <td><code>arita-dotum-dynamic-subset.css</code></td>
-                    </tr>
-                    <tr>
-                      <td>아리따 부리 <small>한글</small></td>
-                      <td><code>Arita Buri KR</code></td>
-                      <td>100 · 300 · 500 · 600 · 700</td>
-                      <td><code>arita-buri-dynamic-subset.css</code></td>
-                    </tr>
-                    <tr>
-                      <td>아리따 산스 <small>라틴</small></td>
-                      <td><code>Arita Sans LTN</code></td>
-                      <td>100 · 300 · 500 · 600 · 700</td>
-                      <td><code>arita-sans-ltn-dynamic-subset.css</code></td>
-                    </tr>
-                    <tr>
-                      <td>아리따 흑체 <small>중문 간체</small></td>
-                      <td><code>Arita Sans SC</code></td>
-                      <td>300 · 500 · 700</td>
-                      <td><code>arita-sans-sc-dynamic-subset.css</code></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="ref-note">
-                <p class="ref-note-title">굵기 이름 매핑</p>
-                <ul>
-                  <li>Thin/HairLine → 100</li>
-                  <li>Light → 300</li>
-                  <li>Medium → 500</li>
-                  <li>SemiBold → 600</li>
-                  <li>Bold → 700</li>
-                </ul>
+                {FONTS.map((font) => (
+                  <div class="font-panel" data-font={font.id}>
+                    <CodeBlock code={linkSnippet(font)} lang="html" />
+                  </div>
+                ))}
               </div>
             </div>
 
             <div class="step">
               <h3 class="step-title">2 · 글꼴 적용하기</h3>
               <p class="step-desc">
-                CSS에서 글꼴을 적용할 곳에 위 표의 <code>font-family</code> 이름을 쓰면 끝입니다.
+                선택한 글꼴을 CSS에 적용하세요.<br />
+                기본 굵기로는 <code>font-weight: 500</code>(Medium)을 권장합니다.
               </p>
               <div class="snippet">
                 <p class="snippet-label">CSS</p>
-                <CodeBlock code={CSS_SNIPPET} lang="css" />
+                {FONTS.map((font) => (
+                  <div class="font-panel" data-font={font.id}>
+                    <CodeBlock code={cssSnippet(font)} lang="css" />
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -194,7 +223,7 @@ const CSS_SNIPPET = `body {
       </main>
 
       <footer>
-        <p>폰트 저작권 © AMOREPACIFIC</p>
+        <p>글꼴 저작권 © AMOREPACIFIC</p>
         <ul class="footer-social">
           <li><a href="https://github.com/bepyan/arita" target="_blank" rel="noopener noreferrer">GITHUB</a></li>
           <li><a href="https://github.com/bepyan/arita/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">LICENSE</a></li>
