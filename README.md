@@ -52,7 +52,7 @@ body {
 
 `@latest`는 항상 최신 배포 버전을 가리킵니다. 프로덕션에서는
 [특정 버전](https://www.npmjs.com/package/@bepyan/arita?activeTab=versions)으로
-고정하면 CDN 캐시를 최대(약 1년, immutable)로 활용할 수 있습니다 (예: `@0.2.0`).
+고정하면 CDN 캐시를 최대(약 1년, immutable)로 활용할 수 있습니다 (예: `@1.0.0`).
 
 ## 빌드
 
