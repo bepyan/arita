@@ -1,0 +1,277 @@
+---
+import CodeBlock from '../components/code-block.astro';
+import Specimen from '../components/specimen.astro';
+import { version } from '../../package.json';
+import '../styles/global.css';
+
+// dev는 로컬 폰트 빌드(sync:demo → public/dist)로 배포 전 결과를 미리보고, 빌드는 CDN을 쓴다.
+const FONT_CSS = import.meta.env.DEV
+  ? '/dist/static/arita.css'
+  : 'https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/dynamic-subset/arita-dynamic-subset.css';
+
+const LINK_SNIPPET = `<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@bepyan/arita@latest/dist/dynamic-subset/arita-dotum-dynamic-subset.css"
+/>`;
+
+const CSS_SNIPPET = `body {
+  font-family: "Arita Dotum KR", sans-serif;
+}`;
+
+const SPECIMENS = [
+  {
+    name: '아리따 돋움',
+    family: 'Arita Dotum KR',
+    desc: '품격 있는 말씨를 사회와 나누기 위해 2005년 처음 시도한 본문용 글꼴입니다. 직선적이고 딱딱한 기존 돋움체에서 부드러운 곡선이 돋보이는 새로운 표정을 제시했습니다.',
+    sample: '부드러운 곡선의 표정',
+    weights: [
+      { label: 'Thin', weight: 100 },
+      { label: 'Light', weight: 300 },
+      { label: 'Medium', weight: 500 },
+      { label: 'SemiBold', weight: 600 },
+      { label: 'Bold', weight: 700 },
+    ],
+  },
+  {
+    name: '아리따 부리',
+    family: 'Arita Buri KR',
+    desc: '긴 문장에 적합한 본문용 글꼴로 2014년 완성됐습니다. 현대적인 여성의 단아하고 지적인 멋스러움을 담았으며, 국내 최초로 머리카락같이 가는 헤어라인 서체를 개발했습니다.',
+    sample: '단아하고 지적인 멋',
+    weights: [
+      { label: 'HairLine', weight: 100 },
+      { label: 'Light', weight: 300 },
+      { label: 'Medium', weight: 500 },
+      { label: 'SemiBold', weight: 600 },
+      { label: 'Bold', weight: 700 },
+    ],
+  },
+  {
+    name: '아리따 산스',
+    family: 'Arita Sans LTN',
+    desc: '2012년 선보인 아리따 글꼴의 첫 로마자 서체입니다. 휴머니스트 산세리프 계열로 부드럽고 우아한 표정을 지니고 있습니다.',
+    sample: 'Sharing Beauty With All',
+    weights: [
+      { label: 'Thin', weight: 100 },
+      { label: 'Light', weight: 300 },
+      { label: 'Medium', weight: 500 },
+      { label: 'SemiBold', weight: 600 },
+      { label: 'Bold', weight: 700 },
+    ],
+  },
+  {
+    name: '아리따 흑체',
+    family: 'Arita Sans SC',
+    desc: '국내 첫 중문 기업 서체로, 아모레퍼시픽이 추구하는 현대적인 여성의 아름다움을 담았습니다. 2016년 본문용 굵기를 시작으로 두 굵기를 더해 2017년 3종이 완성됐습니다.',
+    sample: '现代女性的美丽',
+    weights: [
+      { label: 'Light', weight: 300 },
+      { label: 'Medium', weight: 500 },
+      { label: 'Bold', weight: 700 },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Arita Webfont · 아리따 글꼴</title>
+    <meta
+      name="description"
+      content="아모레퍼시픽의 나눔 글꼴 아리따(Arita)를 CSS 한 줄로 사용하는 웹폰트 CDN"
+    />
+
+    <link rel="stylesheet" href={FONT_CSS} />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="site-nav">
+        <a class="brand" href="#">아리따</a>
+        <nav aria-label="주요 링크">
+          <a href="#usage">사용법</a>
+          <a href="#fonts">글꼴 소개</a>
+          <a href="https://github.com/bepyan/arita" aria-label="GitHub 저장소">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+            GitHub
+          </a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" aria-label="아리따 글꼴 소개">
+          <h1 class="sr-only">아리따 글꼴 — Arita Webfont CDN</h1>
+          <div class="hero-word" aria-hidden="true">
+            <div class="face face-buri">
+              <span class="glyphs">아리따</span>
+              <span class="face-label">아리따 부리 · Arita Buri</span>
+            </div>
+            <div class="face face-dotum">
+              <span class="glyphs">아리따</span>
+              <span class="face-label">아리따 돋움 · Arita Dotum</span>
+            </div>
+          </div>
+          <div class="hero-copy">
+            <p class="hero-lead">
+              <a href="https://design.amorepacific.com/arita/">아모레퍼시픽의 기업 아이덴티티</a>를 담은 폰트
+            </p>
+            <p class="hero-sub">설치도, 파일 다운로드도 필요 없습니다.</p>
+          </div>
+          <div class="hero-cta">
+            <a class="btn btn-fill" href="#usage">바로 시작하기</a>
+            <a class="btn btn-ghost" href="https://github.com/bepyan/arita">
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+              GitHub
+            </a>
+          </div>
+        </section>
+
+        <section id="usage" class="reveal">
+          <div class="usage">
+            <h2>사용법</h2>
+            <p class="usage-note">
+              웹페이지 <code>&lt;head&gt;</code>에 링크 한 줄을 넣으면, 방문자의 브라우저가
+              CDN(jsDelivr)에서 글꼴을 알아서 받아옵니다. 두 단계면 끝납니다.
+            </p>
+
+            <div class="step">
+              <h3 class="step-title">1. 글꼴 불러오기</h3>
+              <p class="step-desc">
+                쓰고 싶은 글꼴을 골라 <code>&lt;head&gt;</code>에 링크를 추가하세요.
+                아래는 <strong>아리따 돋움</strong> 예시입니다. 다른 글꼴은 표에서 CSS 파일명만
+                바꾸면 됩니다. 필요한 글꼴만 불러와야 페이지가 가볍습니다.
+              </p>
+              <div class="snippet">
+                <p class="snippet-label">HTML</p>
+                <CodeBlock code={LINK_SNIPPET} lang="html" />
+              </div>
+              <div class="ref-table-wrap">
+                <table class="ref-table">
+                  <thead>
+                    <tr>
+                      <th>글꼴</th>
+                      <th><code>font-family</code></th>
+                      <th><code>font-weight</code></th>
+                      <th>CSS 파일명</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>아리따 돋움 <small>(한글)</small></td>
+                      <td><code>Arita Dotum KR</code></td>
+                      <td>100 · 300 · 500 · 600 · 700</td>
+                      <td><code>arita-dotum-dynamic-subset.css</code></td>
+                    </tr>
+                    <tr>
+                      <td>아리따 부리 <small>(한글)</small></td>
+                      <td><code>Arita Buri KR</code></td>
+                      <td>100 · 300 · 500 · 600 · 700</td>
+                      <td><code>arita-buri-dynamic-subset.css</code></td>
+                    </tr>
+                    <tr>
+                      <td>아리따 산스 <small>(로마자)</small></td>
+                      <td><code>Arita Sans LTN</code></td>
+                      <td>100 · 300 · 500 · 600 · 700</td>
+                      <td><code>arita-sans-ltn-dynamic-subset.css</code></td>
+                    </tr>
+                    <tr>
+                      <td>아리따 흑체 <small>(중문 간체)</small></td>
+                      <td><code>Arita Sans SC</code></td>
+                      <td>300 · 500 · 700</td>
+                      <td><code>arita-sans-sc-dynamic-subset.css</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="ref-note">
+                <p class="ref-note-title">굵기 이름 매핑</p>
+                <ul>
+                  <li>Thin/HairLine → 100</li>
+                  <li>Light → 300</li>
+                  <li>Medium → 500</li>
+                  <li>SemiBold → 600</li>
+                  <li>Bold → 700</li>
+                </ul>
+                <p>
+                  어떤 글꼴을 고를지 고민된다면
+                  <a href="#fonts">글꼴 소개</a>에서 표정을 비교해 보세요.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <h3 class="step-title">2. 글꼴 적용하기</h3>
+              <p class="step-desc">
+                CSS에서 글꼴을 적용할 곳에 위 표의 <code>font-family</code> 이름을 쓰면 끝입니다.
+              </p>
+              <div class="snippet">
+                <p class="snippet-label">CSS</p>
+                <CodeBlock code={CSS_SNIPPET} lang="css" />
+              </div>
+            </div>
+
+            <div class="step">
+              <h3 class="step-title">더 알아보기</h3>
+              <p class="step-desc">
+                기본 방식(dynamic subset)은 글꼴 파일 전체 대신 페이지에 실제 쓰인
+                글자 조각만 내려받습니다. 한글처럼 글자 수가 많은 글꼴에 특히 유리하고,
+                따로 설정할 것은 없습니다.
+              </p>
+              <div class="ref-table-wrap">
+                <table class="ref-table">
+                  <thead>
+                    <tr>
+                      <th>용도</th>
+                      <th>경로</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>모든 글꼴을 한 번에</td>
+                      <td><code>dist/dynamic-subset/arita-dynamic-subset.css</code></td>
+                    </tr>
+                    <tr>
+                      <td>글꼴 파일을 통째로 (static)</td>
+                      <td><code>dist/static/arita-dotum.css</code> 등 파일명 규칙 동일</td>
+                    </tr>
+                    <tr>
+                      <td>모든 글꼴을 통째로</td>
+                      <td><code>dist/static/arita.css</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="ref-note">
+                <code>@latest</code>는 항상 최신 배포 버전을 가리킵니다. 프로덕션에서는
+                <a href="https://www.npmjs.com/package/@bepyan/arita?activeTab=versions">특정 버전</a>으로
+                고정하면 CDN 캐시를 최대(약 1년, immutable)로 활용할 수 있습니다 (예: <code>@{version}</code>).
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="fonts">
+          <h2>글꼴 소개</h2>
+          {SPECIMENS.map((s) => <Specimen {...s} />)}
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      <div class="wrap">
+        <div class="wordmark">아리따 글꼴</div>
+        <div class="footer-legal">
+          <p>폰트 저작권 © AmorePacific</p>
+          <p>"Arita"는 아모레퍼시픽의 등록상표입니다.</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://design.amorepacific.com/arita/">아모레퍼시픽 공식 안내</a>
+          <a href="https://github.com/bepyan/arita">GitHub</a>
+          <a href="https://www.npmjs.com/package/@bepyan/arita">npm</a>
+          <a href="https://github.com/bepyan/arita/blob/main/LICENSE">LICENSE</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

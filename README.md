@@ -56,20 +56,27 @@ body {
 
 ## 빌드
 
-원본 TTF(`fonts/`)로부터 `dist/`를, `index.template.html`로부터 `index.html`을 재생성합니다.
+원본 TTF(`fonts/`)로부터 `dist/`를 재생성합니다.
 
 ```bash
-npm install
-npm run build          # static + dynamic-subset + demo 전체
-npm run build:static   # static만
-npm run build:subset   # dynamic-subset만
-npm run build:demo     # index.template.html → index.html (코드 하이라이팅)
-npm run serve          # http://localhost:8080 에서 index.html 데모 확인
+pnpm install
+pnpm build             # static + dynamic-subset 전체
+pnpm build:static      # static만
+pnpm build:subset      # dynamic-subset만
 ```
 
-> 데모 페이지는 `index.template.html`이 소스입니다. 페이지를 수정하려면
-> 템플릿을 고친 뒤 `npm run build:demo`로 `index.html`을 재생성하세요.
-> `index.html`을 직접 편집하면 다음 빌드에서 덮어써집니다.
+### 데모 페이지
+
+데모는 [Astro](https://astro.build) 기반이며 소스는 `src/`에 있습니다.
+개발 서버는 로컬 폰트 빌드(`dist/`)를 참조하므로 폰트 빌드가 선행돼야 하고,
+빌드·배포된 페이지는 jsDelivr CDN의 폰트를 사용합니다.
+
+```bash
+pnpm dev               # http://localhost:4321 개발 서버
+pnpm build:demo        # .site/ 에 정적 사이트 생성
+pnpm preview           # .site/ 로컬 미리보기
+pnpm deploy:demo       # .site/ 를 Cloudflare Pages에 배포
+```
 
 ### 도구
 

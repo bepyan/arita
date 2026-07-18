@@ -1,0 +1,33 @@
+---
+interface Props {
+  name: string;
+  family: string;
+  desc: string;
+  sample: string;
+  weights: { label: string; weight: number }[];
+}
+
+const { name, family, desc, sample, weights } = Astro.props;
+---
+
+<div class="specimen reveal">
+  <div class="specimen-head">
+    <h3>{name}</h3>
+    <code>font-family: "{family}"</code>
+  </div>
+  <p class="specimen-desc">{desc}</p>
+  <div class="weights" style={`font-family: '${family}'`}>
+    {
+      weights.map(({ label, weight }) => (
+        <div class="weight-row">
+          <span class="w">
+            {label} · {weight}
+          </span>
+          <span class="sample" style={`font-weight: ${weight}`}>
+            {sample}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+</div>

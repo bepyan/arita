@@ -20,17 +20,28 @@
     "font",
     "cdn"
   ],
+  "packageManager": "pnpm@10.32.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "cn-font-split"
+    ]
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:static": "node scripts/build.mjs --only=static",
     "build:subset": "node scripts/build.mjs --only=subset",
-    "build:demo": "node scripts/build.mjs --only=demo",
-    "deploy:demo": "npx wrangler pages deploy . --project-name=arita",
-    "serve": "python3 -m http.server 8080",
-    "prepublishOnly": "npm run build"
+    "sync:demo": "rm -rf public && mkdir -p public && cp -R dist public/dist",
+    "dev": "pnpm run sync:demo && astro dev",
+    "build:demo": "rm -rf public && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "deploy:demo": "pnpm dlx wrangler pages deploy .site --project-name=arita",
+    "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "astro": "^7.1.1",
     "cn-font-split": "7.4.3",
-    "shiki": "^3.23.0"
+    "typescript": "^6.0.3"
   }
 }

@@ -9,9 +9,8 @@
  *   node scripts/build.mjs              # 전체
  *   node scripts/build.mjs --only=static
  *   node scripts/build.mjs --only=subset
- *   node scripts/build.mjs --only=demo    # index.template.html → index.html
  *
- * 의존: woff2_compress (brew install woff2), cn-font-split·shiki (devDependency).
+ * 의존: woff2_compress (brew install woff2), cn-font-split (devDependency).
  */
 import { execFile } from 'node:child_process';
 import {
@@ -29,7 +28,6 @@ import { promisify } from 'node:util';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fontSplit } from 'cn-font-split';
-import { codeToHtml } from 'shiki';
 
 const execFileAsync = promisify(execFile);
 
@@ -38,8 +36,6 @@ const FONTS_DIR = join(ROOT, 'fonts');
 const DIST = join(ROOT, 'dist');
 const STATIC_DIR = join(DIST, 'static');
 const SUBSET_DIR = join(DIST, 'dynamic-subset');
-const DEMO_TEMPLATE = join(ROOT, 'index.template.html');
-const DEMO_OUTPUT = join(ROOT, 'index.html');
 
 /**
  * 폰트 인벤토리. weight는 관용 매핑 적용(실측 usWeightClass=250인 Thin/HairLine → 100).
@@ -232,41 +228,6 @@ function countFaces(css) {
 }
 
 // ────────────────────────────────────────────────────────────
-// demo: index.template.html의 코드블록을 Shiki로 미리 하이라이팅해 index.html 생성.
-// 런타임 네트워크 의존을 없애 새로고침 시에도 하이라이팅이 안정적이다.
-// ────────────────────────────────────────────────────────────
-const HTML_ENTITIES = { '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"', '&#39;': "'" };
-
-function decodeEntities(s) {
-  return s.replace(/&(lt|gt|amp|quot|#39);/g, (m) => HTML_ENTITIES[m]);
-}
-
-async function buildDemo() {
-  if (!existsSync(DEMO_TEMPLATE)) {
-    throw new Error(`데모 템플릿이 없습니다: ${DEMO_TEMPLATE}`);
-  }
-  const template = readFileSync(DEMO_TEMPLATE, 'utf8');
-
-  // <div class="code-block" data-lang="..."> ... <pre class="raw"><code>SRC</code></pre> ... </div>
-  // 내가 생성한 고정 구조만 대상으로 하므로 정규식 치환이 안전하다.
-  const blockRe =
-    /(<div class="code-block" data-lang="([a-z]+)">\s*)<pre class="raw"><code>([\s\S]*?)<\/code><\/pre>/g;
-
-  let count = 0;
-  const matches = [...template.matchAll(blockRe)];
-  // Shiki 호출은 비동기라 먼저 모든 스니펫을 하이라이팅한 뒤 순서대로 치환.
-  const highlighted = await Promise.all(
-    matches.map(({ 2: lang, 3: rawCode }) =>
-      codeToHtml(decodeEntities(rawCode), { lang, theme: 'github-light' }),
-    ),
-  );
-
-  const html = template.replace(blockRe, (_m, prefix) => `${prefix}${highlighted[count++]}`);
-  writeFileSync(DEMO_OUTPUT, html);
-  console.log(`  [demo] index.html (${count} code blocks highlighted)`);
-}
-
-// ────────────────────────────────────────────────────────────
 async function main() {
   if (!existsSync(FONTS_DIR) || readdirSync(FONTS_DIR).filter((f) => f.endsWith('.ttf')).length === 0) {
     throw new Error(`fonts/에 TTF가 없습니다: ${FONTS_DIR}`);
@@ -280,10 +241,6 @@ async function main() {
   if (only === 'all' || only === 'subset') {
     console.log('▶ dynamic-subset 빌드…');
     await buildSubset();
-  }
-  if (only === 'all' || only === 'demo') {
-    console.log('▶ demo(index.html) 빌드…');
-    await buildDemo();
   }
   console.log('✅ 완료');
   // ponytail: cn-font-split FFI가 Node shutdown에서 SIGABRT(exit 134)를 낸다. 정상 종료로 우회.
