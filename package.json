@@ -40,8 +40,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@resvg/resvg-js": "^2.6.2",
     "astro": "^7.1.1",
     "cn-font-split": "7.4.3",
+    "satori": "^0.28.0",
     "typescript": "^6.0.3"
   }
 }
